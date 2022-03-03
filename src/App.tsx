@@ -17,6 +17,7 @@ import MetricsProvider from './contexts/MetricsContext';
 import Metrics from './Features/Metrics/Metrics';
 import Measurements from './Features/Measurements/Measurements';
 import MeasurementsProvider from './contexts/MeasurementsContext';
+import Charts from './Features/Charts/Charts';
 
 const splitLink = split(
   ({ query }) => {
@@ -73,7 +74,7 @@ const App = () => (
                   <Measurements />
                 </Grid>
                 <Grid item xs={12}>
-                  <div>Graph</div>
+                  <Charts />
                 </Grid>
               </Grid>
             </MainContainer>
