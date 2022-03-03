@@ -46,5 +46,4 @@ const MetricsProvider: FC<{
     </MetricsContext.Provider>
   );
 };
-
 export default MetricsProvider;

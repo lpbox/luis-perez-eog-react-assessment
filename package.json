@@ -12,12 +12,14 @@
     "@types/react-dom": "^16.9.3",
     "@types/react-redux": "^7.1.5",
     "graphql": "^14.5.8",
+    "graphql-ws": "^5.6.2",
     "isomorphic-fetch": "^2.2.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-toastify": "^5.4.0",
     "react-use": "^17.2.4",
     "rebound": "^0.1.0",
+    "recharts": "^2.1.9",
     "subscriptions-transport-ws": "^0.9.19"
   },
   "scripts": {
