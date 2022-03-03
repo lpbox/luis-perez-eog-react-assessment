@@ -12,3 +12,6 @@ Read more about this assessment [here](https://react.eogresources.com)
 5. Show measurements card based on measurements context values
 6. Fetch measurements history data inside useEffect hook on selected metrics change
 7. Show line chart for the measurements history fetched. In this case, showed only those ones with unit 'PSI' since it could be not ideal to show data with different unit in one chart
+
+### Screenshot of example
+![image](https://user-images.githubusercontent.com/97510989/156616157-3454bf68-88bc-453b-a6a9-2911ba367634.png)
