@@ -15,4 +15,4 @@ Read more about this assessment [here](https://react.eogresources.com)
 8. Show line charts for each units
 
 ### Screenshot of example
-![image](https://user-images.githubusercontent.com/97510989/156616157-3454bf68-88bc-453b-a6a9-2911ba367634.png)
+![image](https://user-images.githubusercontent.com/97510989/156866062-abc1de3c-d95e-416e-a4ec-ca1b45f53451.png)
