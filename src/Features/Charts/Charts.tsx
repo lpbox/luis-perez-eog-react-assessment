@@ -1,6 +1,5 @@
 import { gql, useLazyQuery } from '@apollo/client';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { groupBy } from 'lodash';
 import moment from 'moment';
 import React, { FC, useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -15,6 +14,8 @@ import {
 } from 'recharts';
 import { makeStyles } from '@material-ui/core/styles';
 import { MetricsContext } from '../../contexts/MetricsContext';
+import { MeasurementData } from '../../types/measurementData';
+import { formatChartGroups, groupChartsByUnit, listMetricsGroupedByUnit } from '../../utils/chart.util';
 
 const query = gql`
   query ($input: [MeasurementQuery]) {
@@ -41,29 +42,8 @@ const chartColors = [
   '#000000',
 ];
 
-type MeasurementDataItem = {
-  metric: string;
-  at: string;
-  value: number;
-  unit: string;
-};
-
-type MeasurementData = {
-  metric: string;
-  measurements?: MeasurementDataItem[];
-};
-
 type MeasurementDataResponse = {
   getMultipleMeasurements: MeasurementData[];
-};
-
-type MeasurmentChartDataItemValue = {
-  [key: string]: number;
-};
-
-type MeasurmentChartDataItem = MeasurmentChartDataItemValue & {
-  at: number;
-  unit: string;
 };
 
 const useStyles = makeStyles({
@@ -96,62 +76,15 @@ const Charts: FC = () => {
   }
   if (!data) return null;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const psiMeasurements = (data?.getMultipleMeasurements || []).filter(
-    (measurement) => measurement.measurements?.[0]?.unit === 'PSI',
-  );
-
   const measurementsWithData = (data?.getMultipleMeasurements || []).filter(
     measurement => (measurement.measurements?.length || 0) > 0,
   );
 
-  const chartGroups = groupBy(
-    data?.getMultipleMeasurements || [],
-    (measurement) => measurement.measurements?.[0].unit,
-  );
+  const chartGroups = groupChartsByUnit(measurementsWithData);
 
-  const metricsGroupedByUnit = measurementsWithData.reduce(
-    (accum: { [key: string]: string[] }, measurement) => {
-      const unit = measurement.measurements?.[0].unit as string;
-      return {
-        ...accum,
-        [unit]: [...(accum[unit] || []), measurement.metric],
-      };
-    }, {},
-  );
+  const metricsGroupedByUnit = listMetricsGroupedByUnit(measurementsWithData);
 
-  const chartGroupsFormatted: MeasurmentChartDataItem[][] = Object.entries(
-    chartGroups,
-  ).reduce((accum: MeasurmentChartDataItem[][], [unit, groups]) => {
-    const chartData = groupBy(
-      groups
-        .map((group) => (group.measurements || []).map((measurement) => ({
-          metric: measurement.metric,
-          at: measurement.at,
-          value: measurement.value,
-        })))
-        .reduce((groupAccum, group) => [...groupAccum, ...group], []),
-      'at',
-    );
-
-    const spreadChartData: MeasurmentChartDataItem[] = Object.entries(
-      chartData,
-    ).map(
-      ([key, items]) => ({
-        at: parseInt(key, 10),
-        ...items.reduce(
-          (chartDataAccum, item) => ({
-            ...chartDataAccum,
-            [item.metric]: item.value,
-            unit,
-          }),
-          {},
-        ),
-      } as MeasurmentChartDataItem),
-    );
-
-    return [...accum, spreadChartData];
-  }, []);
+  const chartGroupsFormatted = formatChartGroups(chartGroups);
 
   return (
     <>
